@@ -169,7 +169,7 @@
   .goods
     display: flex
     position: absolute
-    top: 174px
+    top: 134px
     bottom: 46px
     width: 100%
     overflow: hidden

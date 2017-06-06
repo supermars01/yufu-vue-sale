@@ -5,6 +5,7 @@ import App from './App';
 import goods from 'components/goods/goods';
 import ratings from 'components/ratings/ratings';
 import seller from 'components/seller/seller';
+import choosePlace from 'components/choosePlace/choosePlace';
 
 import 'common/stylus/index.styl';
 
@@ -23,6 +24,9 @@ const routes = [{
 }, {
   path: '/seller',
   component: seller
+}, {
+  path: '/choosePlace',
+  component: choosePlace
 }];
 
 const router = new VueRouter({

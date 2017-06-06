@@ -7,7 +7,7 @@
       <div class="content">
         <div class="title">
           <span class="brand"></span>
-          <span class="name">{{seller.name}}</span>
+          <span class="name">{{seller.name | capitalize}}</span>
         </div>
         <div class="description">
           {{seller.description}}/{{seller.deliveryTime}}分钟送达
@@ -17,10 +17,10 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count" @click="showDetail">
+      <!-- <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
-      </div>
+      </div> -->
     </div>
     <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
@@ -86,6 +86,13 @@
       },
       hideDetail() {
         this.detailShow = false;
+      }
+    },
+    filters: {
+      capitalize: function (value) {
+        if (!value) return '';
+        value = value.toString();
+        return value.charAt(0).toUpperCase() + value.slice(1);
       }
     },
     created() {

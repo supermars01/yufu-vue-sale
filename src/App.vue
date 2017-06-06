@@ -19,7 +19,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {urlParse} from 'common/js/util';
   import header from 'components/header/header.vue';
 
   const ERR_OK = 0;
@@ -27,19 +26,17 @@
   export default {
     data() {
       return {
-        seller: {
-          id: (() => {
-            let queryParam = urlParse();
-            return queryParam.id;
-          })()
-        }
+        seller: {}
       };
     },
     created() {
-      this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
+      this.$http.get('/api/seller').then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
           this.seller = Object.assign({}, this.seller, response.data);
+          this.$nextTick(() => {
+            window.console.log(this.seller);
+          });
         }
       });
     },
@@ -54,7 +51,7 @@
   @import "./common/stylus/mixin.styl"
 
   .tab
-    display: flex
+    display: none
     width: 100%
     height: 40px
     line-height: 40px

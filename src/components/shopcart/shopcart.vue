@@ -15,6 +15,7 @@
         <div class="content-right" @click.stop.prevent="pay">
           <div class="pay" :class="payClass">
             {{payDesc}}
+            <router-link to="/choosePlace"></router-link>
           </div>
         </div>
       </div>
@@ -323,8 +324,16 @@
           &.not-enough
             background: #2b333b
           &.enough
+            position:relative;
             background: #00b43c
             color: #fff
+            a
+              display:block;
+              width:100%;
+              height:100%;
+              position:absolute;
+              left:0;
+              top:0
     .ball-container
       .ball
         position: fixed
