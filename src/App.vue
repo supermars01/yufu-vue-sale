@@ -19,10 +19,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import Vue from 'vue';
   import header from 'components/header/header.vue';
 
   const ERR_OK = 0;
-
+  window.eventBus = new Vue();
   export default {
     data() {
       return {
@@ -34,9 +35,7 @@
         response = response.body;
         if (response.errno === ERR_OK) {
           this.seller = Object.assign({}, this.seller, response.data);
-          this.$nextTick(() => {
-            window.console.log(this.seller);
-          });
+          this.$nextTick(() => {});
         }
       });
     },

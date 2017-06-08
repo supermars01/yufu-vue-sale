@@ -1,7 +1,21 @@
 <template>
   <div class="choosePlace" ref="choosePlace">
+    <div class="list-header">
+        <h1 class="title">购物车</h1>
+    </div>
+    <div class="list-content" ref="listContent">
+       <ul>
+          <li class="foodsList" v-for="food in selectFoods">
+            <span class="name">{{food.name}}</span>
+              <div class="price">
+                <span>￥{{food.price}}</span>
+                <span>{{food.count}}</span>
+              </div>
+          </li>
+        </ul>     
+    </div>
     <form action="" id="myForm">
-      <div v-for="(cp,index) in seller.choosePlace" class="cpItems">
+      <div v-for="(cp,index) in choosePlace" class="cpItems">
         <input type="radio" :id="index" class="magic-radio" name="cp"  :value="cp" v-model="picked">
         <label :for="index">{{cp}}</label> 
       </div>
@@ -14,7 +28,6 @@
 
 <script type="text/ecmascript-6">
   const ERR_OK = 0;
-
   export default {
     props: {
       seller: {
@@ -24,7 +37,8 @@
     data() {
       return {
         choosePlace: [],
-        picked: ''
+        picked: '',
+        selectFoods: []
       };
     },
     created() {
@@ -33,7 +47,7 @@
         if (response.errno === ERR_OK) {
           this.choosePlace = response.data.choosePlace;
           this.$nextTick(() => {
-            window.console.log(response.data.choosePlace);
+            window.eventBus.$on('eventBusName', function(val) { window.console.log(val); });
           });
         }
       });
@@ -50,6 +64,44 @@
   @import "../../common/stylus/mixin.styl"
   .choosePlace
     width:100%;
+    .list-header
+      height: 40px;
+      line-height: 40px;
+      padding: 0 18px;
+      background: #f3f5f7;
+      border-bottom: 1px solid rgba(7,17,27,0.1);
+    .foodsList
+      padding: 12px 18px;
+      box-sizing: border-box;
+      position: relative;
+      left: 0;
+      top: 0;
+      bottom: 48px;
+      z-index: 30;
+      width: 100%;
+      background: #fff;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      :after
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid rgba(7,17,27,0.1);
+        content: ' ';
+      .name
+        line-height: 24px;
+        font-size: 14px;
+        color: #07111b;
+      .price
+        position: absolute;
+        right: 30px;
+        bottom: 12px;
+        line-height: 24px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #f01414;
     form
       .cpItems
         position:relative;

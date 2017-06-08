@@ -59,7 +59,6 @@
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
-
   export default {
     props: {
       selectFoods: {
@@ -186,10 +185,8 @@
       pay() {
         if (this.totalPrice < this.minPrice) {
           return;
-        }
-        this.selectFoods.forEach((food) => {
-           window.console.log(food);
-        });
+        };
+        window.eventBus.$emit('eventBusName', this.selectFoods);
       },
       addFood(target) {
         this.drop(target);

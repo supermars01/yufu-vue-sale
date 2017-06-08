@@ -8,7 +8,6 @@ import seller from 'components/seller/seller';
 import choosePlace from 'components/choosePlace/choosePlace';
 
 import 'common/stylus/index.styl';
-
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
