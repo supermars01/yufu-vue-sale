@@ -6,7 +6,7 @@
           <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"
               @click="selectMenu(index,$event)">
           <span class="text border-1px">
-            <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
+            <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.categoryName}}
           </span>
           </li>
         </ul>
@@ -14,21 +14,17 @@
       <div class="foods-wrapper" ref="foodsWrapper">
         <ul>
           <li v-for="item in goods" class="food-list" ref="foodList">
-            <h1 class="title">{{item.name}}</h1>
+            <h1 class="title">{{item.categoryName}}</h1>
             <ul>
               <li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
                 <div class="icon">
-                  <img width="57" height="57" :src="food.icon">
+                  <img width="57" height="57" :src="food.imageFile">
                 </div>
                 <div class="content">
-                  <h2 class="name">{{food.name}}</h2>
+                  <h2 class="name">{{food.caipinName}}</h2>
                   <p class="desc">{{food.description}}</p>
                   <div class="extra">
-                    <span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
-                  </div>
-                  <div class="price">
-                    <span class="now">￥{{food.price}}</span><span class="old"
-                                                                  v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+                    <span class="count">库存{{food.caipinNumber}}份</span>
                   </div>
                   <div class="cartcontrol-wrapper">
                     <cartcontrol @add="addFood" :food="food"></cartcontrol>
@@ -39,10 +35,9 @@
           </li>
         </ul>
       </div>
-      <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice"
-                :minPrice="seller.minPrice"></shopcart>
+      <shopcart ref="shopcart" :selectFoods="selectFoods"></shopcart>
     </div>
-    <food @add="addFood" :food="selectedFood" ref="food"></food>
+    <food @add="addFood" :food="selectedFood" ref="food" :showFlag="showFlag"></food>
   </div>
 </template>
 
@@ -55,17 +50,13 @@
   const ERR_OK = 0;
 
   export default {
-    props: {
-      seller: {
-        type: Object
-      }
-    },
     data() {
       return {
         goods: [],
         listHeight: [],
         scrollY: 0,
-        selectedFood: {}
+        selectedFood: {},
+        showFlag: false
       };
     },
     computed: {
@@ -94,7 +85,7 @@
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 
-      this.$http.get('/api/goods').then((response) => {
+      this.$http.get('/api/data').then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
           this.goods = response.data;

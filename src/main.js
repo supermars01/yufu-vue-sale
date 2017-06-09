@@ -3,10 +3,6 @@ import VueRouter from 'vue-router';
 import VueResource from 'vue-resource';
 import App from './App';
 import goods from 'components/goods/goods';
-import ratings from 'components/ratings/ratings';
-import seller from 'components/seller/seller';
-import choosePlace from 'components/choosePlace/choosePlace';
-
 import 'common/stylus/index.styl';
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -17,15 +13,6 @@ const routes = [{
 }, {
   path: '/goods',
   component: goods
-}, {
-  path: '/ratings',
-  component: ratings
-}, {
-  path: '/seller',
-  component: seller
-}, {
-  path: '/choosePlace',
-  component: choosePlace
 }];
 
 const router = new VueRouter({

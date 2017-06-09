@@ -28,6 +28,9 @@
           Vue.set(this.food, 'count', 1);
         } else {
           this.food.count++;
+          // if(this.food.count >= this.food.caipinNumber) {
+          //   return;
+          // }
         }
         this.$emit('add', event.target);
       },

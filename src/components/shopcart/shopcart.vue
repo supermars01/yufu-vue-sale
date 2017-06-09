@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="shopcart">
+    <div class="shopcart" v-show="vShow">
       <div class="content" @click="toggleList">
         <div class="content-left">
           <div class="logo-wrapper">
@@ -9,13 +9,11 @@
             </div>
             <div class="num" v-show="totalCount>0">{{totalCount}}</div>
           </div>
-          <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
-          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
+          <div class="desc">另需选择就餐桌位</div>
         </div>
         <div class="content-right" @click.stop.prevent="pay">
           <div class="pay" :class="payClass">
             {{payDesc}}
-            <router-link to="/choosePlace"></router-link>
           </div>
         </div>
       </div>
@@ -37,10 +35,7 @@
           <div class="list-content" ref="listContent">
             <ul>
               <li class="food" v-for="food in selectFoods">
-                <span class="name">{{food.name}}</span>
-                <div class="price">
-                  <span>￥{{food.price*food.count}}</span>
-                </div>
+                <span class="name">{{food.caipinName}}</span>
                 <div class="cartcontrol-wrapper">
                   <cartcontrol @add="addFood" :food="food"></cartcontrol>
                 </div>
@@ -53,12 +48,14 @@
     <transition name="fade">
       <div class="list-mask" @click="hideList" v-show="listShow"></div>
     </transition>
+    <choosePlace :selectFoods="selectFoods" :vShow="vShow" v-show="!vShow"></choosePlace>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
+  import choosePlace from 'components/choosePlace/choosePlace';
   export default {
     props: {
       selectFoods: {
@@ -71,14 +68,6 @@
             }
           ];
         }
-      },
-      deliveryPrice: {
-        type: Number,
-        default: 0
-      },
-      minPrice: {
-        type: Number,
-        default: 0
       }
     },
     data() {
@@ -101,17 +90,11 @@
           }
         ],
         dropBalls: [],
-        fold: true
+        fold: true,
+        vShow: true
       };
     },
     computed: {
-      totalPrice() {
-        let total = 0;
-        this.selectFoods.forEach((food) => {
-          total += food.price * food.count;
-        });
-        return total;
-      },
       totalCount() {
         let count = 0;
         this.selectFoods.forEach((food) => {
@@ -120,17 +103,10 @@
         return count;
       },
       payDesc() {
-        if (this.totalPrice === 0) {
-          return `￥${this.minPrice}元起送`;
-        } else if (this.totalPrice < this.minPrice) {
-          let diff = this.minPrice - this.totalPrice;
-          return `还差￥${diff}元起送`;
-        } else {
-          return '去结算';
-        }
+        return (this.totalCount === 0) ? ' 请选择菜品 ' : ' 去下单 ';
       },
       payClass() {
-        if (this.totalPrice < this.minPrice) {
+        if (!(this.totalCount)) {
           return 'not-enough';
         } else {
           return 'enough';
@@ -183,10 +159,12 @@
         });
       },
       pay() {
-        if (this.totalPrice < this.minPrice) {
+        if (!this.totalCount) {
           return;
         };
-        window.eventBus.$emit('eventBusName', this.selectFoods);
+        this.vShow = !this.vShow;
+        this.fold = true;
+        this.$parent.showFlag = false;
       },
       addFood(target) {
         this.drop(target);
@@ -229,11 +207,11 @@
       }
     },
     components: {
-      cartcontrol
+      cartcontrol,
+      choosePlace
     }
   };
 </script>
-
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
 
